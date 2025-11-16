@@ -1,15 +1,15 @@
 @echo off
 title cyberpatriot script frfr
-color 0a
+color 01
 
 REM Display Intro Screen
-echo ============================================
-echo          Cyberpatriot 18 Script Win11
-echo                by BlueJayCoding
+echo =======================================================
+echo             Cyberpatriot 18 Script Win11
+echo                  by BlueJayCoding
 echo   GitHub Repository: https://github.com/BlueJayCoding/
-echo ============================================
+echo =======================================================
 echo.
-echo this script should help you secure a couple of points ong 
+echo this script should help you secure a couple of points ong
 echo.
 echo please run this script as administrator, and make sure to read each step before proceeding.
 echo.
@@ -40,13 +40,15 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR" /v "Start
 echo USB ports have been disabled.
 pause
 
-echo Step 4: Setting password policies...
+echo Step 4: Setting all password policies...
 rem Set minimum password length to 8 characters
 net accounts /minpwlen:8
 rem Set password expiration to 30 days
 net accounts /maxpwage:30
 rem Enforce password history to prevent reuse
 net accounts /uniquepw:5
+rem Set account lockout threshold to 5 invalid attempts 
+net accounts /lockoutthreshold:5 /lockoutduration:15
 echo Password policies have been applied.
 pause
 
@@ -79,8 +81,45 @@ net user guest /active:no
 echo Guest accounts have been disabled successfully.
 pause
 
+REM Step 8: Disable unused services (modify as needed)
+echo.
+echo Step 8: Disabling unused services...
+echo This will disable specific services on your system.
+echo The services being disabled are: Fax, Remote Registry, Telnet, FTP, SNMP Service, UPnP Device Host, SSDP Discovery
+echo.
+echo The services will take time to stop as net stop is used to ensure they are fully stopped.
+echo. 
+pause
+sc config "Fax" start= disabled
+
+sc config "RemoteRegistry" start= disabled
+sc config "Telnet" start= disabled
+sc config msftpsvc start= disabled
+net stop msftpsvc
+sc config "SNMP Service" start=disabled
+net stop "SNMP Service"
+sc config "upnphost" start=disabled
+net stop "upnphost"
+sc config "SSDPSRV" start=disabled
+net stop "SSDPSRV"
+
+
+REM Step 9: Enable Windows Defender SmartScreen
+echo.
+echo Step 9: Enabling Windows Defender SmartScreen...
+echo This will enable Windows Defender SmartScreen on your system.
+echo.
+pause
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System" /v EnableSmartScreen /t REG_DWORD /d 1 /f
+
+
+
 REM end of script 11/14/2025
+echo ======================================================
 echo All steps completed, good luck, and win the round! :D 
+echo ======================================================
+pause
+
 
 
 
