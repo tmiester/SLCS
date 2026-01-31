@@ -1,16 +1,16 @@
 @echo off
-title cyberpatriot 18 script in the big '25 
+title cyberpatriot 18 script in the grand '26
 color 02
 chcp 65001 >nul 2>&1
-::
+
 REM Check for Administrator Privileges
-::net session >nul 2>&1
-::if %errorlevel% neq 0 (
-::  echo Run as Administrator
-::  pause
-::  exit /b
-::)
-::
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+  echo Run as Administrator
+  pause
+ exit /b
+)
+
 
 REM Display Intro Screen
 echo ╔═══════════════════════════════════════════════════════════╗
